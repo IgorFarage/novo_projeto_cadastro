@@ -41,13 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Nosso novo app
+
+    # --- APPS DE TERCEIROS ---
     'rest_framework',
-    'auth_api',
     'corsheaders',
-    'rest_framework_simplejwt',
-    'djoser',
-    'cadastro', 
+    'rest_framework_simplejwt',  # <--- Gerencia Tokens JWT
+    'djoser',                    # <--- Gerencia Rotas de Usuário
+
+    # --- MEUS APPS ---
+    'cadastro',
+    'auth_api',
 ]
 
 MIDDLEWARE = [
@@ -145,19 +148,17 @@ REST_FRAMEWORK = {
 
 from datetime import timedelta
 
+# --- CONFIGURAÇÃO DO SIMPLE JWT ---
 SIMPLE_JWT = {
-    # O token de acesso só vale por 60 minutos (segurança)
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), 
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    
-    # Define o formato do cabeçalho como 'Bearer [Token]' (Padrão OAuth 2.0)
-    'AUTH_HEADER_TYPES': ('Bearer',),               
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # Token vale por 1 hora
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Login dura 1 dia
+    'AUTH_HEADER_TYPES': ('Bearer',),               # Padrão OAuth 2.0 (Authorization: Bearer <token>)
 }
 
-# Configurações do Djoser para usar nossos serializers e JWT
+# --- CONFIGURAÇÃO DO DJOSER ---
 DJOSER = {
-    'USER_CREATE_PASSWORD_RETYPE': True, # Exige confirmar senha no registro
-    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'USER_CREATE_PASSWORD_RETYPE': True,      # Exige confirmação de senha no registro
     'SERIALIZERS': {
-        'current_user': 'auth_api.serializers.UserSerializer', # Usaremos este serializer no passo 3
-    }
+        'current_user': 'auth_api.serializers.UserSerializer', # Usa nosso serializer customizado
+    },
 }
