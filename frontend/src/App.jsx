@@ -3,12 +3,13 @@ import Login from './components/Login';
 import Register from './components/Register';
 import UserInfo from './components/UserInfo';
 import CadastroForm from './components/CadastroForm';
+import ListaBitrix from './components/ListaBitrix'; // <--- Importamos a lista nova
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
-  // Verifica se já existe um token salvo ao carregar a página
+  // Verifica se já tem token salvo ao abrir o site
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
       setIsLoggedIn(true);
@@ -26,24 +27,34 @@ function App() {
     setIsLoggedIn(false);
   };
 
-  // --- TELA DO SISTEMA (LOGADO) ---
+  // --- TELA DO SISTEMA (QUANDO LOGADO) ---
   if (isLoggedIn) {
     return (
-      <div style={{ maxWidth: '800px', margin: '0 auto', fontFamily: 'Arial' }}>
-        <h1 style={{ textAlign: 'center', color: '#333' }}>Sistema de Leads</h1>
+      <div style={{ maxWidth: '900px', margin: '0 auto', fontFamily: 'Arial', paddingBottom: '50px' }}>
+        <h1 style={{ textAlign: 'center', color: '#333' }}>Sistema de Gestão de Leads</h1>
 
-        {/* Mostra quem está logado e botão de sair */}
+        {/* 1. Barra de Topo com Info do Usuário */}
         <UserInfo onLogout={handleLogout} />
 
-        <hr style={{ margin: '30px 0', borderTop: '1px solid #ccc' }} />
+        <hr style={{ margin: '30px 0', border: 'none', borderTop: '1px solid #ddd' }} />
 
-        {/* Formulário Protegido */}
-        <CadastroForm />
+        {/* 2. Formulário de Cadastro */}
+        <CadastroForm aoSucesso={() => {
+          alert("Lead Cadastrado com Sucesso!");
+          // Dica: Aqui poderíamos forçar a lista a atualizar automaticamente
+          window.location.reload(); // Maneira simples de atualizar a lista abaixo
+        }} />
+
+        <hr style={{ margin: '30px 0', border: 'none', borderTop: '1px solid #ddd' }} />
+
+        {/* 3. Lista de Leads vindos do Bitrix */}
+        <ListaBitrix />
+
       </div>
     );
   }
 
-  // --- TELA DE ACESSO (NÃO LOGADO) ---
+  // --- TELA DE ACESSO (QUANDO NÃO LOGADO) ---
   return (
     <div style={{ fontFamily: 'Arial' }}>
       <h1 style={{ textAlign: 'center' }}>Portal de Acesso</h1>

@@ -1,4 +1,5 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Lead
@@ -104,3 +105,42 @@ def leads_list(request):
         
         # Caso os dados enviados pelo React estejam inválidos (ex: email sem @)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Adicione estes imports se não existirem
+# from rest_framework.decorators import api_view, permission_classes
+# from rest_framework.permissions import IsAuthenticated
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated]) # Garante que só logados vejam (Opcional se já estiver no settings global)
+def listar_leads_bitrix(request):
+    """
+    Consulta os Leads diretamente do Bitrix24 e retorna para o Frontend.
+    """
+    try:
+        # Método do Bitrix para listar leads
+        url_bitrix = f"{BITRIX_WEBHOOK_URL}/crm.lead.list"
+        
+        # Parâmetros para filtrar e selecionar campos específicos
+        # 'select': Quais campos queremos trazer (reduz tráfego)
+        # 'order': Ordenação (DESC = Decrescente por ID)
+        payload = {
+            "select": ["ID", "TITLE", "NAME", "LAST_NAME", "STATUS_ID", "OPPORTUNITY", "DATE_CREATE"],
+            "order": { "ID": "DESC" }
+        }
+        
+        # Faz a chamada segura servidor-servidor
+        response = requests.post(url_bitrix, json=payload)
+        
+        if response.status_code == 200:
+            dados = response.json()
+            # O Bitrix retorna os leads dentro de 'result'
+            lista_leads = dados.get('result', [])
+            return Response(lista_leads, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                "erro": "Bitrix recusou a conexão", 
+                "detalhe": response.text
+            }, status=status.HTTP_502_BAD_GATEWAY)
+
+    except Exception as e:
+        return Response({"erro": "Falha interna ao conectar com Bitrix", "detalhe": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
