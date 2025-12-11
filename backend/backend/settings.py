@@ -31,6 +31,9 @@ DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+# Bitrix24 Webhook URL
+BITRIX_WEBHOOK_URL = os.getenv('BITRIX_WEBHOOK_URL', '')
+
 
 # Application definition
 
@@ -136,6 +139,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Force reload for new routes
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

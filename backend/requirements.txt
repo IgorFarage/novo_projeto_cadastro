@@ -1,0 +1,26 @@
+# Django Framework
+Django>=5.0,<6.0
+
+# Django REST Framework
+djangorestframework>=3.14.0
+
+# CORS Headers para comunicação com Frontend
+django-cors-headers>=4.3.0
+
+# Autenticação JWT
+djangorestframework-simplejwt>=5.3.0
+
+# Djoser - Gerenciamento de usuários
+djoser>=2.2.0
+
+# PostgreSQL Database Adapter
+psycopg2-binary>=2.9.9
+
+# Variáveis de ambiente
+python-dotenv>=1.0.0
+
+# Ferramentas de desenvolvimento (opcional)
+# pylint>=3.0.0
+# black>=23.0.0
+# pytest>=7.4.0
+# pytest-django>=4.5.0
