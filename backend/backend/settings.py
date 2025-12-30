@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # --- MEUS APPS ---
     'cadastro',
     'auth_api',
+    'pagamentos',
 ]
 
 MIDDLEWARE = [

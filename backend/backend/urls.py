@@ -21,4 +21,7 @@ urlpatterns = [
     # POST /auth/jwt/create/ -> Fazer Login (recebe user/pass, retorna tokens)
     # POST /auth/jwt/refresh/ -> Renovar o token vencido
     path('auth/', include('djoser.urls.jwt')),
+
+    # --- Rotas de Pagamento ---
+    path('api/pagamentos/', include('pagamentos.urls')),
 ]
